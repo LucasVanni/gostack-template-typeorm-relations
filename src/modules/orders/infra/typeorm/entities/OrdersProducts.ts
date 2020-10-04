@@ -11,24 +11,36 @@ import {
 import Order from '@modules/orders/infra/typeorm/entities/Order';
 import Product from '@modules/products/infra/typeorm/entities/Product';
 
+@Entity('orders_products')
 class OrdersProducts {
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  public id!: string;
 
-  order: Order;
+  @ManyToOne(() => Order, order => order.order_products)
+  @JoinColumn({ name: 'order_id' })
+  public order!: Order;
 
-  product: Product;
+  @ManyToOne(() => Product, product => product.order_products)
+  @JoinColumn({ name: 'product_id' })
+  public product!: Product;
 
-  product_id: string;
+  @Column('uuid')
+  public product_id!: string;
 
-  order_id: string;
+  @Column('uuid')
+  public order_id!: string;
 
-  price: number;
+  @Column('decimal', { precision: 10, scale: 2 })
+  public price!: number;
 
-  quantity: number;
+  @Column('int')
+  public quantity!: number;
 
-  created_at: Date;
+  @CreateDateColumn()
+  public created_at!: Date;
 
-  updated_at: Date;
+  @UpdateDateColumn()
+  public updated_at!: Date;
 }
 
 export default OrdersProducts;
